@@ -34,9 +34,9 @@ export class Form extends Component {
     const { name, email, message } = this.state;
     return (
       <Fragment>
+        <h2>Add Movie</h2>
+        <SearchMovie />
         <div className="card card-body mt-4 mb-4">
-          <h2>Add Movie</h2>
-          <SearchMovie />
           <form onSubmit={this.onSubmit}>
             <div className="form-group">
               <label>Name</label>

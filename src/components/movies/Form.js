@@ -48,6 +48,7 @@ export class Form extends Component {
                 className="form-control"
                 type="date"
                 name="watch_date"
+                required
                 onChange={this.onChange}
                 value={watch_date}
               />
@@ -57,8 +58,11 @@ export class Form extends Component {
               <input
                 className="form-control"
                 type="number"
-                step="0.5"
+                max="100"
+                min="0"
+                step="1"
                 name="rating"
+                required
                 onChange={this.onChange}
                 value={rating}
               />

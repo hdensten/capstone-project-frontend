@@ -64,6 +64,33 @@ export default class SearchMovie extends Component {
     this.getSelectedMovie(movie);
   }
 
+  dateFormatter(date) {
+    const monthNames = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sept",
+      "Oct",
+      "Nov",
+      "Dec"
+    ];
+
+    if (date.length === 10) {
+      const dateList = date.split("-");
+      const year = dateList[0];
+      const month = dateList[1];
+      const day = dateList[2].replace(/^0+/, "");
+      return monthNames[month - 1] + " " + day + ", " + year;
+    } else {
+      return "N/A";
+    }
+  }
+
   render() {
     if (this.state.movieSelected === false) {
       return (
@@ -87,12 +114,12 @@ export default class SearchMovie extends Component {
               <div className="row">
                 {this.state.data.map(movie => {
                   return (
-                    <div className="col-md-4">
+                    <div className="col-md-3">
                       <div className="card mb-4 shadow-sm">
                         <svg
                           className="bd-placeholder-img card-img-top"
                           width="100"
-                          height="225"
+                          height="400"
                           xmlns="http://www.w3.org/2000/svg"
                           preserveAspectRatio="xMidYMid slice"
                           focusable="false"
@@ -105,17 +132,16 @@ export default class SearchMovie extends Component {
                               ")",
                             backgroundSize: "cover",
                             backgroundPosition: "center",
-                            backgroundRepeat: "no-repeat",
-                            height: "50%",
-                            width: "50%"
+                            backgroundRepeat: "no-repeat"
+                            // height: "60%",
+                            // width: "60%"
                           }}
-                        >
-                          <title>Placeholder</title>
-                        </svg>
+                        />
                         <div className="card-body">
                           <h5>{movie.title}</h5>
                           <div className="card-text">
-                            Release date: {movie.release_date}
+                            Release date:{" "}
+                            {this.dateFormatter(movie.release_date)}
                           </div>
                           <div className="d-flex justify-content-between align-items-center">
                             <div className="btn-group">

@@ -23,10 +23,10 @@ export class Movies extends Component {
         `https://api.themoviedb.org/3/movie/${movieId}?api_key=${TMDB_API_KEY}&language=en-US`
       )
       .then(response => {
-        console.log(response.data);
         // this.setState({
         //   data: response.data
         // });
+        console.log(response.data);
       })
       .catch(error => {
         console.log(error);
@@ -37,7 +37,47 @@ export class Movies extends Component {
     this.props.getMovies();
   }
 
+  dateFormatter(date) {
+    const monthNames = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sept",
+      "Oct",
+      "Nov",
+      "Dec"
+    ];
+
+    if (date.length === 10) {
+      const dateList = date.split("-");
+      const year = dateList[0];
+      const month = dateList[1];
+      const day = dateList[2].replace(/^0+/, "");
+      return monthNames[month - 1] + " " + day + ", " + year;
+    } else {
+      return "N/A";
+    }
+  }
+
   render() {
+    const emojiRating = rating => {
+      if (rating <= 20) {
+        return <div>🤢</div>;
+      } else if ((rating > 20) & (rating <= 40)) {
+        return <div>😣</div>;
+      } else if ((rating > 40) & (rating <= 60)) {
+        return <div>🙂</div>;
+      } else if ((rating > 60) & (rating <= 80)) {
+        return <div>😊</div>;
+      } else if (rating > 80) {
+        return <div>😁</div>;
+      }
+    };
     return (
       <Fragment>
         <div
@@ -76,8 +116,12 @@ export class Movies extends Component {
                 {this.getMovieInfo(movie.movie_id)}
                 <td>{movie.title}</td>
                 <td>{movie.movie_id}</td>
-                <td>{movie.watch_date}</td>
-                <td>{movie.rating}</td>
+                <td>{this.dateFormatter(movie.watch_date)}</td>
+                <td>
+                  <div style={{ display: "flex" }}>
+                    {movie.rating}% {emojiRating(movie.rating)}
+                  </div>
+                </td>
                 <td>{movie.review}</td>
                 <td>
                   <button

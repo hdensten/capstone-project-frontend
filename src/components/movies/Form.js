@@ -3,13 +3,12 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { addMovie } from "../../actions/movies";
-import SearchMovie from "./Search";
 
 export class Form extends Component {
   state = {
-    name: "",
-    email: "",
-    message: ""
+    watch_date: "",
+    rating: "",
+    review: ""
   };
 
   static propTypes = {
@@ -20,52 +19,58 @@ export class Form extends Component {
 
   onSubmit = e => {
     e.preventDefault();
-    const { name, email, message } = this.state;
-    const movie = { name, email, message };
+    const { watch_date, rating, review } = this.state;
+    const movie_id = this.props.movieId;
+    const title = this.props.title;
+    const movie = { movie_id, title, watch_date, rating, review };
+    console.log(movie);
     this.props.addMovie(movie);
     this.setState({
-      name: "",
-      email: "",
-      message: ""
+      movieId: 0,
+      title: "",
+      watch_date: "",
+      rating: "",
+      review: ""
     });
   };
 
   render() {
-    const { name, email, message } = this.state;
+    console.log(this.props.movieId);
+    const { watch_date, rating, review } = this.state;
     return (
       <Fragment>
-        <h2>Add Movie</h2>
-        <SearchMovie />
         <div className="card card-body mt-4 mb-4">
           <form onSubmit={this.onSubmit}>
+            <h2>Write Your Review</h2>
             <div className="form-group">
-              <label>Name</label>
+              <label>Date Watched</label>
               <input
                 className="form-control"
-                type="text"
-                name="name"
+                type="date"
+                name="watch_date"
                 onChange={this.onChange}
-                value={name}
+                value={watch_date}
               />
             </div>
             <div className="form-group">
-              <label>Email</label>
+              <label>Rating</label>
               <input
                 className="form-control"
-                type="email"
-                name="email"
+                type="number"
+                step="0.5"
+                name="rating"
                 onChange={this.onChange}
-                value={email}
+                value={rating}
               />
             </div>
             <div className="form-group">
-              <label>Message</label>
+              <label>Review</label>
               <textarea
                 className="form-control"
                 type="text"
-                name="message"
+                name="review"
                 onChange={this.onChange}
-                value={message}
+                value={review}
               />
             </div>
             <div className="form-group">
@@ -75,11 +80,6 @@ export class Form extends Component {
             </div>
           </form>
         </div>
-        <Link to="/">
-          <button type="button" className="btn btn-link">
-            Back to Logs
-          </button>
-        </Link>
       </Fragment>
     );
   }

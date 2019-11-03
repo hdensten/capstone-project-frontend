@@ -1,17 +1,12 @@
 import React, { Component, Fragment } from "react";
-import ReactDOM from "react-dom";
-import {
-  HashRouter as Router,
-  Route,
-  Switch,
-  Redirect
-} from "react-router-dom";
+import { HashRouter as Router, Route, Switch } from "react-router-dom";
 
 import { Provider as AlertProvider } from "react-alert";
 import AlertTemplate from "react-alert-template-basic";
 
 import Header from "./components/layout/Header";
 import Dashboard from "./components/movies/Dashboard";
+import Search from "./components/movies/Search";
 import Alerts from "./components/layout/Alerts";
 import Login from "./components/accounts/Login";
 import Register from "./components/accounts/Register";
@@ -45,7 +40,7 @@ class App extends Component {
               <div className="container">
                 <Switch>
                   <PrivateRoute exact path="/" component={Dashboard} />
-                  <PrivateRoute exact path="/form" component={Form} />
+                  <PrivateRoute exact path="/add-movie" component={Search} />
                   <Route exact path="/register" component={Register} />
                   <Route exact path="/login" component={Login} />
                 </Switch>

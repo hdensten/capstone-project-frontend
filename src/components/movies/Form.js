@@ -1,15 +1,19 @@
 import React, { Component, Fragment } from "react";
-import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { addMovie } from "../../actions/movies";
 
 export class Form extends Component {
-  state = {
-    watch_date: "",
-    rating: "",
-    review: ""
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      watch_date: "",
+      rating: "",
+      review: "",
+      movieSelected: true
+    };
+  }
 
   static propTypes = {
     addMovie: PropTypes.func.isRequired
@@ -26,8 +30,6 @@ export class Form extends Component {
     console.log(movie);
     this.props.addMovie(movie);
     this.setState({
-      movieId: 0,
-      title: "",
       watch_date: "",
       rating: "",
       review: ""
@@ -35,7 +37,7 @@ export class Form extends Component {
   };
 
   render() {
-    console.log(this.props.movieId);
+    console.log("movieID prop:", this.props.movieId);
     const { watch_date, rating, review } = this.state;
     return (
       <Fragment>

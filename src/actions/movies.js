@@ -2,7 +2,7 @@ import axios from "axios";
 import { createMessage, returnErrors } from "./messages";
 import { tokenConfig } from "./auth";
 
-import { GET_MOVIES, DELETE_MOVIE, ADD_MOVIE } from "./types";
+import { GET_MOVIES, GET_MOVIE, DELETE_MOVIE, ADD_MOVIE } from "./types";
 
 // GET MOVIES
 export const getMovies = () => (dispatch, getState) => {
@@ -11,6 +11,21 @@ export const getMovies = () => (dispatch, getState) => {
     .then(res => {
       dispatch({
         type: GET_MOVIES,
+        payload: res.data
+      });
+    })
+    .catch(err => {
+      dispatch(returnErrors(err.response.data, err.response.status));
+    });
+};
+
+// GET MOVIE
+export const getMovie = id => (dispatch, getState) => {
+  axios
+    .get(`http://localhost:8000/api/movies/${id}/`, tokenConfig(getState))
+    .then(res => {
+      dispatch({
+        type: GET_MOVIE,
         payload: res.data
       });
     })

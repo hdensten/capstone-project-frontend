@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
@@ -38,11 +38,11 @@ export default class SearchMovie extends Component {
     e.preventDefault();
   }
 
-  getSelectedMovie(movie) {
+  getSelectedMovie(movieId) {
     let TMDB_API_KEY = `${process.env.REACT_APP_TMDB_API_KEY}`;
     axios
       .get(
-        `https://api.themoviedb.org/3/movie/${movie}?api_key=${TMDB_API_KEY}&language=en-US`
+        `https://api.themoviedb.org/3/movie/${movieId}?api_key=${TMDB_API_KEY}&language=en-US`
       )
       .then(response => {
         console.log(response.data);
@@ -59,9 +59,29 @@ export default class SearchMovie extends Component {
     this.setState({ [e.target.name]: e.target.value });
   }
 
-  onClick(movie, title) {
-    this.setState({ movieSelected: true, movieId: movie, title: title });
-    this.getSelectedMovie(movie);
+  onClick(movieId, title) {
+    this.setState({
+      movieSelected: true,
+      movieId: movieId,
+      title: title
+    });
+    console.log(
+      "movieID state onClick:",
+      this.state.movieId,
+      "movieSelected state onClick:",
+      this.state.movieSelected
+    );
+    this.getSelectedMovie(movieId);
+  }
+
+  backToSearchClick() {
+    this.setState(
+      { movieSelected: false },
+      console.log(
+        "backToSearchClick movieSelected state:",
+        this.state.movieSelected
+      )
+    );
   }
 
   dateFormatter(date) {
@@ -193,10 +213,23 @@ export default class SearchMovie extends Component {
               </div>
             </div>
           </div>
-          <Form movieId={this.state.movieId} title={this.state.title} />
+          <Form
+            movieId={this.state.movieId}
+            title={this.state.title}
+            movieSelected={this.state.movieSelected}
+          />
           <Link to="/">
             <button type="button" className="btn btn-link">
               Back to Logs
+            </button>
+          </Link>
+          <Link to="/search">
+            <button
+              type="button"
+              className="btn btn-link"
+              onClick={() => this.backToSearchClick()}
+            >
+              Back to Search
             </button>
           </Link>
         </div>

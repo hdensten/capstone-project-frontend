@@ -3,10 +3,10 @@ import { withAlert } from "react-alert";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-export class Alerts extends Component {
-  static propTypes = {
-    error: PropTypes.object.isRequired
-  };
+export default class Alerts extends Component {
+  // static propTypes = {
+  //   error: PropTypes.object.isRequired
+  // };
 
   componentDidUpdate(prevProps) {
     const { error, alert, review } = this.props;
@@ -38,4 +38,4 @@ const mapStateToProps = state => ({
   review: state.reviews
 });
 
-export default connect(mapStateToProps)(withAlert()(Alerts));
+// export default connect(mapStateToProps)(withAlert()(Alerts));

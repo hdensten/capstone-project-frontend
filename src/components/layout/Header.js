@@ -1,25 +1,24 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
-import { logout } from "../../actions/auth";
+import { Link, withRouter } from "react-router-dom";
 
-export class Header extends Component {
-  static propTypes = {
-    auth: PropTypes.object.isRequired,
-    logout: PropTypes.func.isRequired
+class Header extends Component {
+  handleSuccessfulLogout = () => {
+    this.props.handleSuccessfulLogout();
+    this.props.history.push("/login");
   };
   render() {
-    const { isAuthenticated, user } = this.props.auth;
-
     const authLinks = (
       <ul className="navbar-nav mr-auto mt-2 mt-lg-0">
         <span className="navbar-text mr-3">
-          <strong>{user ? `Welcome ${user.username}` : ""}</strong>
+          <strong>
+            {this.props.currentUser
+              ? `Welcome ${this.props.currentUser.username}`
+              : ""}
+          </strong>
         </span>
         <li className="nav-item">
           <button
-            onClick={this.props.logout}
+            onClick={this.handleSuccessfulLogout}
             className="nav-link btn btn-info btn-dm text-light"
           >
             Logout
@@ -61,18 +60,11 @@ export class Header extends Component {
               Movie Logger
             </Link>
           </div>
-          {isAuthenticated ? authLinks : guestLinks}
+          {this.props.loggedInStatus === "LOGGED_IN" ? authLinks : guestLinks}
         </div>
       </nav>
     );
   }
 }
 
-const mapStateToProps = state => ({
-  auth: state.auth
-});
-
-export default connect(
-  mapStateToProps,
-  { logout }
-)(Header);
+export default withRouter(Header);

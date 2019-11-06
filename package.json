@@ -13,6 +13,7 @@
     "babel-loader": "^8.0.6",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "dotenv": "^8.2.0",
+    "js-cookie": "^2.2.1",
     "prop-types": "^15.7.2",
     "react": "^16.11.0",
     "react-alert": "^6.0.0",
@@ -24,7 +25,8 @@
     "react-transition-group": "^4.3.0",
     "redux": "^4.0.4",
     "redux-devtools-extension": "^2.13.8",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "uuid": "^3.3.3"
   },
   "proxy": "http://localhost:8000",
   "scripts": {

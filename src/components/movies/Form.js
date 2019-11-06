@@ -1,58 +1,66 @@
 import React, { Component, Fragment } from "react";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
-import { addMovie } from "../../actions/movies";
+import { withRouter } from "react-router-dom";
+import axios from "axios";
 
-export class Form extends Component {
+class Form extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      watch_date: "",
+      watchDate: "",
       rating: "",
       review: "",
       movieSelected: true
     };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  static propTypes = {
-    addMovie: PropTypes.func.isRequired
-  };
+  handleChange = e => this.setState({ [e.target.name]: e.target.value });
 
-  onChange = e => this.setState({ [e.target.name]: e.target.value });
-
-  onSubmit = e => {
+  handleSubmit = e => {
     e.preventDefault();
-    const { watch_date, rating, review } = this.state;
-    const movie_id = this.props.movieId;
-    const title = this.props.title;
-    const movie = { movie_id, title, watch_date, rating, review };
+    const { watchDate, rating, review } = this.state;
+    const tmdbId = this.props.movieId;
+    const userId = this.props.currentUser.id;
+    const movie = { tmdbId, watchDate, rating, review, userId };
     console.log(movie);
-    this.props.addMovie(movie);
-    this.setState({
-      watch_date: "",
-      rating: "",
-      review: ""
-    });
+    axios
+      .post("http://localhost:5000/movie", movie)
+      .then(response => {
+        console.log("post movie response:", response.data);
+      })
+      .then(() => {
+        this.setState({
+          watchDate: "",
+          rating: "",
+          review: ""
+        });
+        this.props.history.push("/");
+      })
+      .catch(error => {
+        console.log("post movie error:", error);
+      });
   };
 
   render() {
     console.log("movieID prop:", this.props.movieId);
-    const { watch_date, rating, review } = this.state;
+    const { watchDate, rating, review } = this.state;
     return (
       <Fragment>
         <div className="card card-body mt-4 mb-4">
-          <form onSubmit={this.onSubmit}>
+          <form onSubmit={this.handleSubmit}>
             <h2>Write Your Review</h2>
             <div className="form-group">
               <label>Date Watched</label>
               <input
                 className="form-control"
                 type="date"
-                name="watch_date"
+                name="watchDate"
                 required
-                onChange={this.onChange}
-                value={watch_date}
+                onChange={this.handleChange}
+                value={watchDate}
               />
             </div>
             <div className="form-group">
@@ -65,7 +73,7 @@ export class Form extends Component {
                 step="1"
                 name="rating"
                 required
-                onChange={this.onChange}
+                onChange={this.handleChange}
                 value={rating}
               />
             </div>
@@ -75,7 +83,7 @@ export class Form extends Component {
                 className="form-control"
                 type="text"
                 name="review"
-                onChange={this.onChange}
+                onChange={this.handleChange}
                 value={review}
               />
             </div>
@@ -90,7 +98,5 @@ export class Form extends Component {
     );
   }
 }
-export default connect(
-  null,
-  { addMovie }
-)(Form);
+
+export default withRouter(Form);

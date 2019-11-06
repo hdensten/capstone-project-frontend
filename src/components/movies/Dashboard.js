@@ -7,10 +7,10 @@ export default function Dashboard(props) {
   return (
     <Fragment>
       {/* <Form /> */}
-      <Movies />
+      <Movies currentUser={props.currentUser} />
       <div
         className="text-secondary"
-        style={{ position: "absolute", bottom: "5px", marginTop: "5px" }}
+        // style={{ position: "absolute", bottom: "5px", marginTop: "5px" }}
       >
         This product uses the TMDb API but is not endorsed or certified by TMDb.
       </div>

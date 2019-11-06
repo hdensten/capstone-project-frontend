@@ -4,7 +4,7 @@ import axios from "axios";
 
 import Form from "./Form";
 
-export default class SearchMovie extends Component {
+export default class Search extends Component {
   constructor(props) {
     super(props);
 
@@ -17,7 +17,8 @@ export default class SearchMovie extends Component {
 
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
-    this.onClick = this.onClick.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+    this.backToSearchClick = this.backToSearchClick.bind(this);
   }
 
   onSubmit(e) {
@@ -38,11 +39,11 @@ export default class SearchMovie extends Component {
     e.preventDefault();
   }
 
-  getSelectedMovie(movieId) {
+  getSelectedMovie(tmdbId) {
     let TMDB_API_KEY = `${process.env.REACT_APP_TMDB_API_KEY}`;
     axios
       .get(
-        `https://api.themoviedb.org/3/movie/${movieId}?api_key=${TMDB_API_KEY}&language=en-US`
+        `https://api.themoviedb.org/3/movie/${tmdbId}?api_key=${TMDB_API_KEY}&language=en-US`
       )
       .then(response => {
         console.log(response.data);
@@ -59,16 +60,16 @@ export default class SearchMovie extends Component {
     this.setState({ [e.target.name]: e.target.value });
   }
 
-  onClick(movieId, title) {
+  handleClick(movieId, title) {
     this.setState({
       movieSelected: true,
       movieId: movieId,
       title: title
     });
     console.log(
-      "movieID state onClick:",
+      "movieID state handleClick:",
       this.state.movieId,
-      "movieSelected state onClick:",
+      "movieSelected state handleClick:",
       this.state.movieSelected
     );
     this.getSelectedMovie(movieId);
@@ -169,7 +170,7 @@ export default class SearchMovie extends Component {
                                 type="button"
                                 className="btn btn-sm btn-outline-secondary"
                                 onClick={() =>
-                                  this.onClick(movie.id, movie.title)
+                                  this.handleClick(movie.id, movie.title)
                                 }
                               >
                                 Add
@@ -217,13 +218,14 @@ export default class SearchMovie extends Component {
             movieId={this.state.movieId}
             title={this.state.title}
             movieSelected={this.state.movieSelected}
+            currentUser={this.props.currentUser}
           />
           <Link to="/">
             <button type="button" className="btn btn-link">
               Back to Logs
             </button>
           </Link>
-          <Link to="/search">
+          {/* <Link to="/search">
             <button
               type="button"
               className="btn btn-link"
@@ -231,7 +233,7 @@ export default class SearchMovie extends Component {
             >
               Back to Search
             </button>
-          </Link>
+          </Link> */}
         </div>
       );
     }

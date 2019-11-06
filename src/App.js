@@ -1,8 +1,10 @@
 import React, { Component, Fragment } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import axios from "axios";
+import Cookie from "js-cookie";
 
-import { Provider as AlertProvider } from "react-alert";
-import AlertTemplate from "react-alert-template-basic";
+// import { Provider as AlertProvider } from "react-alert";
+// import AlertTemplate from "react-alert-template-basic";
 
 import Header from "./components/layout/Header";
 import Dashboard from "./components/movies/Dashboard";
@@ -11,11 +13,6 @@ import MovieLog from "./components/movies/MovieLog";
 import Alerts from "./components/layout/Alerts";
 import Login from "./components/accounts/Login";
 import Register from "./components/accounts/Register";
-import PrivateRoute from "./components/common/PrivateRoute";
-
-import { Provider } from "react-redux";
-import store from "./store";
-import { loadUser } from "./actions/auth";
 
 import "./styles/bootstrap.min.css";
 
@@ -30,46 +27,169 @@ class App extends Component {
     super(props);
 
     this.state = {
-      movieSelected: false
+      loggedInStatus: "NOT_LOGGED_IN",
+      currentUser: "",
+      isLoading: true
     };
+
+    this.handleSuccessfulLogin = this.handleSuccessfulLogin.bind(this);
+    this.handleUnSuccessfulLogin = this.handleUnSuccessfulLogin.bind(this);
+    this.handleSuccessfulLogout = this.handleSuccessfulLogout.bind(this);
+    this.handleCurrentUser = this.handleCurrentUser.bind(this);
+  }
+
+  handleCurrentUser(user) {
+    this.setState({
+      currentUser: user
+    });
+  }
+
+  handleSuccessfulLogin() {
+    this.setState({
+      loggedInStatus: "LOGGED_IN"
+    });
+  }
+
+  handleUnSuccessfulLogin() {
+    this.setState({
+      loggedInStatus: "NOT_LOGGED_IN"
+    });
+  }
+
+  handleSuccessfulLogout() {
+    Cookie.remove("_user_Session");
+
+    axios
+      .delete(
+        `http://localhost:5000/session/logout/${Cookie.get("_user_Session")}`
+      )
+      .then(response => {
+        if (response.status === 200) {
+        } else {
+          console.log("delete response", response);
+        }
+      })
+      .catch(error => console.log("delete session error:", error));
+    this.setState({
+      loggedInStatus: "NOT_LOGGED_IN",
+      currentUser: "",
+      isLoading: false
+    });
+  }
+
+  handleGetUser(username) {
+    axios
+      .post("http://localhost:5000/session/users", { username: username })
+      .then(response => {
+        this.setState({
+          currentUser: response.data
+        });
+      })
+      .then(() => {
+        this.setState({
+          loggedInStatus: "LOGGED_IN"
+        });
+      })
+      .catch(error => {
+        console.log("handleGetUser", error);
+      });
+  }
+
+  checkLoginStatus() {
+    if (
+      Cookie.get("_user_Session") &&
+      this.state.loggedInStatus === "NOT_LOGGED_IN"
+    ) {
+      axios
+        .get(`http://localhost:5000/session/${Cookie.get("_user_Session")}`)
+        .then(response => {
+          if (response.status === 200) {
+            this.handleGetUser(response.data.username.split("--")[1]);
+          }
+        })
+        .catch((response, error) => {
+          console.log(response, error);
+          Cookie.remove("_user_Session");
+        });
+      // Cookie.get("_user_Session").split("--")[1]
+    } else if (!Cookie.get("_user_session")) {
+      this.setState({ isLoading: false });
+      return null;
+    } else if (
+      Cookie.get("_user_session") &&
+      this.state.loggedInStatus === "LOGGED_IN"
+    ) {
+      this.setState({ isLoading: false });
+      this.props.history.push("/");
+    }
+    this.setState({ isLoading: false });
   }
 
   componentDidMount() {
-    store.dispatch(loadUser());
+    this.checkLoginStatus();
   }
 
   render() {
     return (
-      <Provider store={store}>
-        <AlertProvider template={AlertTemplate} {...alertOptions}>
-          <Router>
-            <Fragment>
-              <Header />
-              <Alerts />
-              <div className="container">
-                <Switch>
-                  <PrivateRoute
-                    exact
-                    path="/"
-                    component={props => (
-                      <Dashboard
-                        {...props}
-                        movieSelected={this.state.movieSelected}
-                      />
-                    )}
-                    // component={Dashboard}
-                    // movieSelected={this.state.movieSelected}
+      // <Provider store={store}>
+      // <AlertProvider template={AlertTemplate} {...alertOptions}>
+      <Router>
+        <Fragment>
+          <Header
+            handleSuccessfulLogout={this.handleSuccessfulLogout}
+            loggedInStatus={this.state.loggedInStatus}
+            currentUser={this.state.currentUser}
+          />
+          <Alerts />
+          <div className="container">
+            <Switch>
+              <Route
+                exact
+                path="/"
+                render={props => (
+                  <Dashboard {...props} currentUser={this.state.currentUser} />
+                )}
+              />
+              <Route
+                path="/movie/:id"
+                render={props => (
+                  <MovieLog {...props} currentUser={this.state.currentUser} />
+                )}
+              />
+              <Route
+                path="/add-movie"
+                render={props => (
+                  <Search {...props} currentUser={this.state.currentUser} />
+                )}
+              />
+              <Route
+                path="/register"
+                render={props => (
+                  <Register
+                    {...props}
+                    handleSuccessfulLogin={this.handleSuccessfulLogin}
+                    handleUnSuccessfulLogin={this.handleUnSuccessfulLogin}
+                    handleCurrentUser={this.handleCurrentUser}
                   />
-                  {/* <PrivateRoute path="/:id" component={MovieLog} /> */}
-                  <PrivateRoute path="/add-movie" component={Search} />
-                  <Route path="/register" component={Register} />
-                  <Route path="/login" component={Login} />
-                </Switch>
-              </div>
-            </Fragment>
-          </Router>
-        </AlertProvider>
-      </Provider>
+                )}
+              />
+              <Route
+                path="/login"
+                render={props => (
+                  <Login
+                    {...props}
+                    handleSuccessfulLogin={this.handleSuccessfulLogin}
+                    handleUnSuccessfulLogin={this.handleUnSuccessfulLogin}
+                    handleCurrentUser={this.handleCurrentUser}
+                  />
+                )}
+              />
+            </Switch>
+          </div>
+        </Fragment>
+      </Router>
+      // </AlertProvider>
+      // </Provider>
     );
   }
 }

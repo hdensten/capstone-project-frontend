@@ -1,45 +1,97 @@
 import React, { Component } from "react";
-import { Link, Redirect } from "react-router-dom";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
-import { login } from "../../actions/auth";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import Cookie from "js-cookie";
+import uuidv1 from "uuid/v1";
+import uuidv4 from "uuid/v4";
 
-export class Login extends Component {
-  state = {
-    username: "",
-    password: ""
-  };
+export default class Login extends Component {
+  constructor(props) {
+    super(props);
 
-  static propTypes = {
-    login: PropTypes.func.isRequired,
-    isAuthenticated: PropTypes.bool
-  };
+    this.state = {
+      username: "",
+      password: "",
+      errorText: "",
+      isLoading: false
+    };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
 
-  onSubmit = e => {
-    e.preventDefault();
-    this.props.login(this.state.username, this.state.password);
-  };
+  handleChange(event) {
+    this.setState({
+      [event.target.name]: event.target.value,
+      errorText: ""
+    });
+  }
 
-  onChange = e => this.setState({ [e.target.name]: e.target.value });
+  handleSubmit(event) {
+    this.setState({
+      isLoading: true
+    });
+    event.preventDefault();
+    const loginData = {
+      username: this.state.username,
+      password: this.state.password
+    };
+    axios
+      .post("http://localhost:5000/user/login", loginData)
+      .then(response => {
+        if (response.status === 200) {
+          console.log("login:", response.data);
+          Cookie.set(
+            "_user_Session",
+            uuidv1() + uuidv4() + "--" + this.state.username,
+            { expires: 1 }
+          );
+          console.log(Cookie.get("_user_Session"));
+          this.props.handleCurrentUser(response.data);
+          this.props.handleSuccessfulLogin();
+        } else {
+          this.setState({
+            errorText: "Incorrect email or password"
+          });
+          this.props.handleUnSuccessfulLogin();
+        }
+      })
+      // .then(() => {
+      //   axios
+      //     .post("http://localhost:5000/session/new", {
+      //       username: `${uuidv1()}--${this.state.username}`,
+      //       session: Cookie.get("_user_Session")
+      //     })
+      .then(() => {
+        this.setState({
+          username: "",
+          password: ""
+        });
+        this.props.history.push("/");
+      })
+      // })
+      .catch(error => {
+        console.log("login", error);
+        this.setState({
+          errorText: "An error occured",
+          isLoading: false
+        });
+      });
+  }
 
   render() {
-    if (this.props.isAuthenticated) {
-      return <Redirect to="/" />;
-    }
-    const { username, password } = this.state;
     return (
       <div className="col-md-6 m-auto">
         <div className="card card-body mt-5">
           <h2 className="text-center">Login</h2>
-          <form onSubmit={this.onSubmit}>
+          <form onSubmit={this.handleSubmit}>
             <div className="form-group">
               <label>Username</label>
               <input
                 type="text"
                 className="form-control"
                 name="username"
-                onChange={this.onChange}
-                value={username}
+                onChange={this.handleChange}
+                value={this.state.username}
               />
             </div>
             <div className="form-group">
@@ -48,8 +100,8 @@ export class Login extends Component {
                 type="password"
                 className="form-control"
                 name="password"
-                onChange={this.onChange}
-                value={password}
+                onChange={this.handleChange}
+                value={this.state.password}
               />
             </div>
             <div className="form-group">
@@ -66,12 +118,3 @@ export class Login extends Component {
     );
   }
 }
-
-const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated
-});
-
-export default connect(
-  mapStateToProps,
-  { login }
-)(Login);

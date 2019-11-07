@@ -12,7 +12,9 @@ class Form extends Component {
       review: "",
       tmdbId: this.props.match.params.tmdbid,
       data: [],
-      posterPath: ""
+      posterPath: "",
+      errorText: "",
+      alertClass: ""
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -52,16 +54,32 @@ class Form extends Component {
       .post("https://reellog.herokuapp.com/movie", movie)
       // .post("http://localhost:5000/movie", movie)
       .then(response => {
+        if (response.data === "MOVIE_EXISTS") {
+          e.preventDefault();
+          return this.setState({
+            errorText: "Movie already logged!",
+            alertClass: "alert alert-primary"
+          });
+        } else if (response.status === 200) {
+          this.setState({
+            watchDate: "",
+            rating: "",
+            review: ""
+          });
+          this.props.history.push("/");
+        } else {
+          return this.setState({ errorText: "An error occured" });
+        }
         console.log("post movie response:", response.data);
       })
-      .then(() => {
-        this.setState({
-          watchDate: "",
-          rating: "",
-          review: ""
-        });
-        this.props.history.push("/");
-      })
+      // .then(() => {
+      //   this.setState({
+      //     watchDate: "",
+      //     rating: "",
+      //     review: ""
+      //   });
+      //   this.props.history.push("/");
+      // })
       .catch(error => {
         console.log("post movie error:", error);
       });
@@ -179,10 +197,15 @@ class Form extends Component {
                 value={review}
               />
             </div>
-            <div className="form-group">
-              <button type="submit" className="btn btn-primary">
-                Submit
-              </button>
+            <div className="d-flex justify-content-between">
+              <div className="form-group">
+                <button type="submit" className="btn btn-primary">
+                  Submit
+                </button>
+              </div>
+              <div className={this.state.alertClass}>
+                <strong>{this.state.errorText}</strong>
+              </div>
             </div>
           </form>
         </div>

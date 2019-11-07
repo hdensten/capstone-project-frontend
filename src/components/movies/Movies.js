@@ -67,68 +67,7 @@ export default class Movies extends Component {
     this.getUserMovies();
   }
 
-  dateFormatter(date) {
-    const monthNames = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sept",
-      "Oct",
-      "Nov",
-      "Dec"
-    ];
-
-    if (date.length === 10) {
-      const dateList = date.split("-");
-      const year = dateList[0];
-      const month = dateList[1];
-      const day = dateList[2].replace(/^0+/, "");
-      return monthNames[month - 1] + " " + day + ", " + year;
-    } else {
-      return "N/A";
-    }
-  }
-
   render() {
-    const emojiRating = rating => {
-      if (rating <= 20) {
-        return (
-          <span role="img" aria-label="nauseated-face">
-            🤢
-          </span>
-        );
-      } else if ((rating > 20) & (rating <= 40)) {
-        return (
-          <span role="img" aria-label="unhappy-face">
-            😣
-          </span>
-        );
-      } else if ((rating > 40) & (rating <= 60)) {
-        return (
-          <span role="img" aria-label="sligtly-smiling-face">
-            🙂
-          </span>
-        );
-      } else if ((rating > 60) & (rating <= 80)) {
-        return (
-          <span role="img" aria-label="smiling-face">
-            😊
-          </span>
-        );
-      } else if (rating > 80) {
-        return (
-          <span role="img" aria-label="grinning-face">
-            😁
-          </span>
-        );
-      }
-    };
-
     return (
       <Fragment>
         <div

@@ -67,7 +67,7 @@ export default class Search extends Component {
   render() {
     return (
       <div>
-        <h2>Search for a Movie or Show</h2>
+        <h2 style={{ marginTop: "20px" }}>Search for a Movie or Show</h2>
         <form onSubmit={this.onSubmit} className="form-inline my-2 my-lg-0">
           <input
             className="form-control mr-sm-2"
@@ -81,6 +81,7 @@ export default class Search extends Component {
             Search
           </button>
         </form>
+        <div style={{ height: "10px" }} />
         <div className="album py-5 bg-light">
           <div className="container">
             <div className="row">

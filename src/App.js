@@ -1,10 +1,5 @@
 import React, { Component, Fragment } from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  Redirect
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import axios from "axios";
 import Cookie from "js-cookie";
 

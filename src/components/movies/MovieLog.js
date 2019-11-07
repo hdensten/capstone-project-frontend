@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -146,7 +146,7 @@ class MovieLog extends Component {
       }
     };
     return (
-      <Fragment>
+      <div>
         <div
           className="card-container"
           style={{
@@ -208,20 +208,31 @@ class MovieLog extends Component {
             <h5>Review:</h5>
             <p>{this.state.data.review}</p>
           </div>
-          <a
-            onClick={this.handleDeleteClick}
-            onMouseEnter={this.toggleHover}
-            onMouseLeave={this.toggleHover}
-            style={{
-              cursor: "pointer",
-              fontSize: "1.5em",
-              color: `${this.hoverStyle()}`
-            }}
-          >
-            <FontAwesomeIcon icon="trash" />
-          </a>
         </div>
-      </Fragment>
+        <nav className="navbar navbar-expand-lg navbar-light bg-light">
+          <div className="collapse navbar-collapse" id="navbarColor03">
+            <ul className="navbar-nav mr-auto">
+              <Link to="/">
+                <button type="button" className="btn btn-link">
+                  Back to All Movies
+                </button>
+              </Link>
+            </ul>
+            <a
+              onClick={this.handleDeleteClick}
+              onMouseEnter={this.toggleHover}
+              onMouseLeave={this.toggleHover}
+              style={{
+                cursor: "pointer",
+                fontSize: "1.5em",
+                color: `${this.hoverStyle()}`
+              }}
+            >
+              <FontAwesomeIcon icon="trash" />
+            </a>
+          </div>
+        </nav>
+      </div>
     );
   }
 }

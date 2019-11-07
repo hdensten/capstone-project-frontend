@@ -134,7 +134,7 @@ export default class Search extends Component {
         </div>
         <Link to="/">
           <button type="button" className="btn btn-link">
-            Back to Logs
+            Back to All Movies
           </button>
         </Link>
       </div>

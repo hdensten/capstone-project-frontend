@@ -156,31 +156,44 @@ class App extends Component {
           <Alerts />
           <div className="container">
             <Switch>
-              <Route
-                exact
-                path="/"
-                render={props => (
-                  <Dashboard {...props} currentUser={this.state.currentUser} />
-                )}
-              />
-              <Route
-                path="/movie/:id"
-                render={props => (
-                  <MovieLog {...props} currentUser={this.state.currentUser} />
-                )}
-              />
-              <Route
-                path="/search"
-                render={props => (
-                  <Search {...props} currentUser={this.state.currentUser} />
-                )}
-              />
-              <Route
-                path="/add-movie/:tmdbid"
-                render={props => (
-                  <Form {...props} currentUser={this.state.currentUser} />
-                )}
-              />
+              {this.state.loggedInStatus === "LOGGED_IN"
+                ? [
+                    <Route
+                      exact
+                      path="/"
+                      render={props => (
+                        <Dashboard
+                          {...props}
+                          currentUser={this.state.currentUser}
+                        />
+                      )}
+                    />,
+                    <Route
+                      path="/movie/:id"
+                      render={props => (
+                        <MovieLog
+                          {...props}
+                          currentUser={this.state.currentUser}
+                        />
+                      )}
+                    />,
+                    <Route
+                      path="/search"
+                      render={props => (
+                        <Search
+                          {...props}
+                          currentUser={this.state.currentUser}
+                        />
+                      )}
+                    />,
+                    <Route
+                      path="/add-movie/:tmdbid"
+                      render={props => (
+                        <Form {...props} currentUser={this.state.currentUser} />
+                      )}
+                    />
+                  ]
+                : null}
               <Route
                 path="/register"
                 render={props => (

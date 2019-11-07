@@ -193,29 +193,30 @@ class App extends Component {
                       )}
                     />
                   ]
-                : null}
-              <Route
-                path="/register"
-                render={props => (
-                  <Register
-                    {...props}
-                    handleSuccessfulLogin={this.handleSuccessfulLogin}
-                    handleUnSuccessfulLogin={this.handleUnSuccessfulLogin}
-                    handleCurrentUser={this.handleCurrentUser}
-                  />
-                )}
-              />
-              <Route
-                path="/login"
-                render={props => (
-                  <Login
-                    {...props}
-                    handleSuccessfulLogin={this.handleSuccessfulLogin}
-                    handleUnSuccessfulLogin={this.handleUnSuccessfulLogin}
-                    handleCurrentUser={this.handleCurrentUser}
-                  />
-                )}
-              />
+                : [
+                    <Route
+                      path="/register"
+                      render={props => (
+                        <Register
+                          {...props}
+                          handleSuccessfulLogin={this.handleSuccessfulLogin}
+                          handleUnSuccessfulLogin={this.handleUnSuccessfulLogin}
+                          handleCurrentUser={this.handleCurrentUser}
+                        />
+                      )}
+                    />,
+                    <Route
+                      path="/login"
+                      render={props => (
+                        <Login
+                          {...props}
+                          handleSuccessfulLogin={this.handleSuccessfulLogin}
+                          handleUnSuccessfulLogin={this.handleUnSuccessfulLogin}
+                          handleCurrentUser={this.handleCurrentUser}
+                        />
+                      )}
+                    />
+                  ]}
             </Switch>
           </div>
         </Fragment>

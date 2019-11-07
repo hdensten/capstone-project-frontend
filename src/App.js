@@ -61,7 +61,10 @@ class App extends Component {
     console.log(Cookie.get("_user_Session"));
     axios
       .delete(
-        `http://localhost:5000/session/logout/${Cookie.get("_user_Session")}`
+        `https://reellog.herokuapp.com/session/logout/${Cookie.get(
+          "_user_Session"
+        )}`
+        // `http://localhost:5000/session/logout/${Cookie.get("_user_Session")}`
       )
       .then(response => {
         Cookie.remove("_user_Session");
@@ -82,7 +85,10 @@ class App extends Component {
 
   handleGetUser(username) {
     axios
-      .post("http://localhost:5000/session/users", { username: username })
+      .post("https://reellog.herokuapp.com/session/users", {
+        username: username
+      })
+      // .post("http://localhost:5000/session/users", { username: username })
       .then(response => {
         this.setState({
           currentUser: response.data
@@ -104,7 +110,10 @@ class App extends Component {
       this.state.loggedInStatus === "NOT_LOGGED_IN"
     ) {
       axios
-        .get(`http://localhost:5000/session/${Cookie.get("_user_Session")}`)
+        .get(
+          `https://reellog.herokuapp.com/session/${Cookie.get("_user_Session")}`
+        )
+        // .get(`http://localhost:5000/session/${Cookie.get("_user_Session")}`)
         .then(response => {
           if (response.status === 200) {
             // this.handleGetUser(response.data.username);

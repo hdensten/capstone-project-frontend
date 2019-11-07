@@ -20,7 +20,8 @@ export default class Movies extends Component {
 
   getUserMovies() {
     axios
-      .get(`http://localhost:5000/movies/${this.props.currentUser.id}`)
+      .get(`https://reellog.herokuapp.com/movies/${this.props.currentUser.id}`)
+      // .get(`http://localhost:5000/movies/${this.props.currentUser.id}`)
       .then(response => {
         console.log("getUserMovies:", response);
         this.setState({

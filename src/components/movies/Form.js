@@ -49,7 +49,8 @@ class Form extends Component {
     const movie = { tmdbId, watchDate, rating, review, posterPath, userId };
     console.log(movie);
     axios
-      .post("http://localhost:5000/movie", movie)
+      .post("https://reellog.herokuapp.com/movie", movie)
+      // .post("http://localhost:5000/movie", movie)
       .then(response => {
         console.log("post movie response:", response.data);
       })

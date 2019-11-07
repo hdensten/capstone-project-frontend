@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import Cookie from "js-cookie";
 import uuidv1 from "uuid/v1";
-import uuidv4 from "uuid/v4";
 
 export default class Login extends Component {
   constructor(props) {
@@ -37,7 +36,8 @@ export default class Login extends Component {
       password: this.state.password
     };
     axios
-      .post("http://localhost:5000/user/login", loginData)
+      .post("https://reellog.herokuapp.com/user/login", loginData)
+      // .post("http://localhost:5000/user/login", loginData)
       .then(response => {
         if (response.data === "INVALID_LOGIN") {
           event.preventDefault();
@@ -55,7 +55,8 @@ export default class Login extends Component {
             { expires: 1 }
           );
           console.log(Cookie.get("_user_Session"));
-          axios.post("http://localhost:5000/session/new", {
+          axios.post("https://reellog.herokuapp.com/session/new", {
+            // axios.post("http://localhost:5000/session/new", {
             // username: this.state.username,
             session: Cookie.get("_user_Session")
           });

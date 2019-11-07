@@ -18,7 +18,8 @@ class MovieLog extends Component {
   handleDeleteClick() {
     axios
       .delete(
-        `http://localhost:5000/movie/delete/${this.props.currentUser.id}/${this.state.id}`
+        `https://reellog.herokuapp.com/movie/delete/${this.props.currentUser.id}/${this.state.id}`
+        // `http://localhost:5000/movie/delete/${this.props.currentUser.id}/${this.state.id}`
       )
       .then(response => {
         console.log(response);
@@ -32,7 +33,8 @@ class MovieLog extends Component {
   getMovieInfo() {
     axios
       .get(
-        `http://localhost:5000/movie/${this.props.currentUser.id}/${this.state.id}`
+        `https://reellog.herokuapp.com/movie/${this.props.currentUser.id}/${this.state.id}`
+        // `http://localhost:5000/movie/${this.props.currentUser.id}/${this.state.id}`
       )
       .then(response => {
         console.log("getMovieInfo:", response);

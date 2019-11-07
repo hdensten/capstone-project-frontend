@@ -48,7 +48,8 @@ export default class Register extends Component {
         password: this.state.password
       };
       axios
-        .post("http://localhost:5000/user/register", loginData)
+        .post("https://reellog.herokuapp.com/user/register", loginData)
+        // .post("http://localhost:5000/user/register", loginData)
         .then(response => {
           console.log("register", response);
           if (response.data === "USERNAME_EXISTS" && response.status === 200) {
@@ -91,7 +92,8 @@ export default class Register extends Component {
           }
         })
         .then(() => {
-          axios.post("http://localhost:5000/session/new", {
+          axios.post("hhttps://reellog.herokuapp.com/session/new", {
+            // axios.post("http://localhost:5000/session/new", {
             session: Cookie.get("_user_Session")
           });
         })

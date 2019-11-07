@@ -13,7 +13,10 @@ export default class Register extends Component {
       email: "",
       password: "",
       password2: "",
-      errorText: ""
+      errorText: "",
+      invalidPass: "form-control",
+      usernameExists: "form-control",
+      emailExists: "form-control"
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -23,105 +26,119 @@ export default class Register extends Component {
   handleChange(event) {
     this.setState({
       [event.target.name]: event.target.value,
-      errorText: ""
+      invalidPass: "form-control",
+      usernameExists: "form-control",
+      emailExists: "form-control"
     });
   }
 
   handleSubmit(event) {
     if (this.state.password !== this.state.password2) {
-      return this.setState({ errorText: "Passwords do not match" });
-    }
-    event.preventDefault();
-    const loginData = {
-      username: this.state.username,
-      email: this.state.email,
-      password: this.state.password
-    };
-    axios
-      .post("http://localhost:5000/user/register", loginData)
-      .then(response => {
-        console.log("register", response);
-        if (response.status === 200) {
-          Cookie.set("_user_Session", uuidv1(), { expires: 1 });
-          console.log(Cookie.get("_user_Session"));
-          this.props.handleCurrentUser(response.data);
-          this.props.handleSuccessfulLogin();
-        } else {
-          this.setState({
-            errorText: "Incorrect email or password"
-          });
-          this.props.handleUnSuccessfulLogin();
-        }
-      })
-      .then(() => {
-        axios.post("http://localhost:5000/session/new", {
-          username: `${uuidv1()}--${this.state.username}`,
-          session: Cookie.get("_user_Session")
-        });
-      })
-      .catch(error => {
-        console.log("register", error);
-        this.setState({
-          errorText: "An error occured"
-        });
+      event.preventDefault();
+      return this.setState({
+        invalidPass: "form-control is-invalid",
+        password2: ""
       });
-    this.setState({
-      username: "",
-      email: "",
-      password: "",
-      password2: ""
-    });
+    } else {
+      this.setState({ invalidPass: "form-control" });
+      event.preventDefault();
+      const loginData = {
+        username: this.state.username,
+        email: this.state.email,
+        password: this.state.password
+      };
+      axios
+        .post("http://localhost:5000/user/register", loginData)
+        .then(response => {
+          console.log("register", response);
+          if (response.data === "USERNAME_EXISTS" && response.status === 200) {
+            event.preventDefault();
+            return this.setState({
+              usernameExists: "form-control is-invalid",
+              username: ""
+            });
+          } else if (
+            response.data === "EMAIL_EXISTS" &&
+            response.status === 200
+          ) {
+            event.preventDefault();
+            return this.setState({
+              emailExists: "form-control is-invalid",
+              email: ""
+            });
+          } else if (response.status === 200) {
+            Cookie.set(
+              "_user_Session",
+              uuidv1() + "--" + this.state.username,
+              // + uuidv4()
+              { expires: 1 }
+            );
+            console.log(Cookie.get("_user_Session"));
+            this.props.handleCurrentUser(response.data);
+            this.props.handleSuccessfulLogin();
+            this.setState({
+              username: "",
+              email: "",
+              password: "",
+              password2: ""
+            });
+            this.props.history.push("/");
+          } else {
+            this.setState({
+              errorText: "An error occured"
+            });
+            this.props.handleUnSuccessfulLogin();
+          }
+        })
+        .then(() => {
+          axios.post("http://localhost:5000/session/new", {
+            session: Cookie.get("_user_Session")
+          });
+        })
+        .catch(error => {
+          console.log("register", error);
+          this.setState({
+            errorText: "An error occured"
+          });
+        });
+    }
   }
 
-  // static propTypes = {
-  //   register: PropTypes.func.isRequired,
-  //   isAuthenticated: PropTypes.bool
-  // };
-
-  // onSubmit = e => {
-  //   e.preventDefault();
-  //   const { username, email, password, password2 } = this.state;
-  //   if (password !== password2) {
-  //     this.props.createMessage({ passwordNotMatch: "Passwords do not match" });
-  //   } else {
-  //     const newUser = {
-  //       username,
-  //       password,
-  //       email
-  //     };
-  //     this.props.register(newUser);
-  //   }
-  // };
-
   render() {
-    // if (this.props.isAuthenticated) {
-    //   return <Redirect to="/" />;
-    // }
-    // const { username, email, password, password2 } = this.state;
     return (
       <div className="col-md-6 m-auto">
         <div className="card card-body mt-5">
           <h2 className="text-center">Register</h2>
           <form onSubmit={this.handleSubmit}>
-            <div className="form-group">
-              <label>Username</label>
+            <div className="form-group has-danger">
+              <label className="form-control-label" htmlFor="inputDanger1">
+                Username
+              </label>
               <input
                 type="text"
-                className="form-control"
+                className={this.state.usernameExists}
                 name="username"
                 value={this.state.username}
                 onChange={this.handleChange}
+                id="inputInvalid"
               />
+              <div className="invalid-feedback">Username already exists</div>
             </div>
-            <div className="form-group">
-              <label>Email</label>
+            <div className="form-group has-danger">
+              <label className="form-control-label" htmlFor="inputDanger1">
+                Email
+              </label>
               <input
                 type="email"
-                className="form-control"
+                className={this.state.emailExists}
                 name="email"
                 value={this.state.email}
                 onChange={this.handleChange}
+                id="inputInvalid"
               />
+              <div className="invalid-feedback">
+                An account with this email already exists
+              </div>
             </div>
             <div className="form-group">
               <label>Password</label>
@@ -133,15 +150,19 @@ export default class Register extends Component {
                 onChange={this.handleChange}
               />
             </div>
-            <div className="form-group">
-              <label>Confirm Password</label>
+            <div className="form-group has-danger">
+              <label className="form-control-label" htmlFor="inputDanger1">
+                Confirm Password
+              </label>
               <input
                 type="password"
-                className="form-control"
+                className={this.state.invalidPass}
                 name="password2"
                 value={this.state.password2}
                 onChange={this.handleChange}
+                id="inputInvalid"
               />
+              <div className="invalid-feedback">Passwords do not match</div>
             </div>
             <div className="form-group">
               <button type="submit" className="btn btn-primary">

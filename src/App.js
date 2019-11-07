@@ -9,6 +9,7 @@ import Cookie from "js-cookie";
 import Header from "./components/layout/Header";
 import Dashboard from "./components/movies/Dashboard";
 import Search from "./components/movies/Search";
+import Form from "./components/movies/Form";
 import MovieLog from "./components/movies/MovieLog";
 import Alerts from "./components/layout/Alerts";
 import Login from "./components/accounts/Login";
@@ -57,14 +58,16 @@ class App extends Component {
   }
 
   handleSuccessfulLogout() {
-    Cookie.remove("_user_Session");
-
+    console.log(Cookie.get("_user_Session"));
     axios
       .delete(
         `http://localhost:5000/session/logout/${Cookie.get("_user_Session")}`
       )
       .then(response => {
-        if (response.status === 200) {
+        Cookie.remove("_user_Session");
+        console.log(response.data);
+        if (response.data === "SESSION_DELETED") {
+          return;
         } else {
           console.log("delete response", response);
         }
@@ -104,7 +107,8 @@ class App extends Component {
         .get(`http://localhost:5000/session/${Cookie.get("_user_Session")}`)
         .then(response => {
           if (response.status === 200) {
-            this.handleGetUser(response.data.username.split("--")[1]);
+            // this.handleGetUser(response.data.username);
+            this.handleGetUser(Cookie.get("_user_Session").split("--")[1]);
           }
         })
         .catch((response, error) => {
@@ -157,9 +161,15 @@ class App extends Component {
                 )}
               />
               <Route
-                path="/add-movie"
+                path="/search"
                 render={props => (
                   <Search {...props} currentUser={this.state.currentUser} />
+                )}
+              />
+              <Route
+                path="/add-movie/:tmdbid"
+                render={props => (
+                  <Form {...props} currentUser={this.state.currentUser} />
                 )}
               />
               <Route

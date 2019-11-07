@@ -12,6 +12,7 @@ class MovieLog extends Component {
       id: this.props.match.params.id
     };
     this.handleDeleteClick = this.handleDeleteClick.bind(this);
+    this.dateFormatter = this.dateFormatter.bind(this);
   }
 
   handleDeleteClick() {
@@ -63,18 +64,18 @@ class MovieLog extends Component {
 
   dateFormatter(date) {
     const monthNames = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
+      "January",
+      "February",
+      "March",
+      "April",
       "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sept",
-      "Oct",
-      "Nov",
-      "Dec"
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
     ];
 
     if (date.length === 10) {
@@ -124,65 +125,74 @@ class MovieLog extends Component {
     };
     return (
       <Fragment>
-        <div className="card mb-3" style={{ maxWidth: "540px" }}>
-          <div className="row no-gutters">
-            <div className="col-md-4">
-              <img
-                src={`https://image.tmdb.org/t/p/original${this.state.tmdbData.poster_path}`}
-                className="card-img"
-                alt=""
-              />
-            </div>
-            <div className="col-md-8">
-              <div className="card-body">
-                <h5 className="card-title">{this.state.tmdbData.title}</h5>
-                <p className="card-text">{this.state.tmdbData.overview}</p>
-                <p className="card-text">
-                  <small className="text-muted">
-                    Release date: {this.state.tmdbData.release_date}
-                    <br />
-                    Runtime: {this.state.tmdbData.runtime} minutes
-                  </small>
-                </p>
+        <div
+          className="card-container"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center"
+          }}
+        >
+          <div
+            className="card mb-3"
+            style={{
+              maxWidth: "540px"
+            }}
+          >
+            <div className="row no-gutters">
+              <div className="col-md-4">
+                <img
+                  src={`https://image.tmdb.org/t/p/original${this.state.tmdbData.poster_path}`}
+                  className="card-img"
+                  alt=""
+                />
+              </div>
+              <div className="col-md-8">
+                <div className="card-body">
+                  <h5 className="card-title">{this.state.tmdbData.title}</h5>
+                  <p className="card-text">{this.state.tmdbData.overview}</p>
+                  <p className="card-text">
+                    <small className="text-muted">
+                      Release date:{" "}
+                      {this.state.tmdbData.release_date
+                        ? this.dateFormatter(this.state.tmdbData.release_date)
+                        : this.state.tmdbData.release_date}
+                      <br />
+                      Runtime: {this.state.tmdbData.runtime} minutes
+                    </small>
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         </div>
-        <table className="table table-striped">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Movie ID</th>
-              <th>Date Watched</th>
-              <th>Rating</th>
-              <th>Review</th>
-              <th />
-              <th />
-            </tr>
-          </thead>
-          <tbody>
-            <tr key={this.state.data.id}>
-              <td>{this.state.tmdbData.title}</td>
-              <td>{this.state.data.tmdb_id}</td>
-              <td>{this.state.data.date}</td>
-              <td>
-                <div style={{ display: "flex" }}>
-                  {this.state.data.rating}%{" "}
-                  {emojiRating(this.state.data.rating)}
-                </div>
-              </td>
-              <td>{this.state.data.review}</td>
-              <td>
-                <button
-                  onClick={this.handleDeleteClick}
-                  className="btn btn-danger btn-sm"
-                >
-                  Delete
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div
+          className="review-container"
+          style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}
+        >
+          <div className="review-left-side">
+            <h5>Date watched:</h5>
+            <p>
+              {this.state.data.date
+                ? this.dateFormatter(this.state.data.date)
+                : this.state.data.date}
+            </p>
+            <h5>Rating:</h5>
+            <p style={{ display: "flex" }}>
+              {this.state.data.rating}% {emojiRating(this.state.data.rating)}
+            </p>
+          </div>
+          <div className="review-right-side">
+            <h5>Review:</h5>
+            <p>{this.state.data.review}</p>
+          </div>
+          <button
+            onClick={this.handleDeleteClick}
+            className="btn btn-danger btn-sm"
+          >
+            Delete
+          </button>
+        </div>
       </Fragment>
     );
   }

@@ -13,7 +13,8 @@ export default class Login extends Component {
       username: "",
       password: "",
       errorText: "",
-      isLoading: false
+      isLoading: false,
+      invalidLogin: "form-control"
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -22,7 +23,7 @@ export default class Login extends Component {
   handleChange(event) {
     this.setState({
       [event.target.name]: event.target.value,
-      errorText: ""
+      invalidLogin: "form-control"
     });
   }
 
@@ -38,36 +39,42 @@ export default class Login extends Component {
     axios
       .post("http://localhost:5000/user/login", loginData)
       .then(response => {
-        if (response.status === 200) {
+        if (response.data === "INVALID_LOGIN") {
+          event.preventDefault();
+          this.props.handleUnSuccessfulLogin();
+          return this.setState({
+            invalidLogin: "form-control is-invalid",
+            password: ""
+          });
+        } else if (response.status === 200) {
           console.log("login:", response.data);
           Cookie.set(
             "_user_Session",
-            uuidv1() + uuidv4() + "--" + this.state.username,
+            uuidv1() + "--" + this.state.username,
+            // + uuidv4()
             { expires: 1 }
           );
           console.log(Cookie.get("_user_Session"));
+          axios.post("http://localhost:5000/session/new", {
+            // username: this.state.username,
+            session: Cookie.get("_user_Session")
+          });
           this.props.handleCurrentUser(response.data);
           this.props.handleSuccessfulLogin();
+          this.props.history.push("/");
         } else {
-          this.setState({
-            errorText: "Incorrect email or password"
-          });
           this.props.handleUnSuccessfulLogin();
+          return this.setState({
+            invalidLogin: "form-control is-invalid",
+            password: ""
+          });
         }
       })
       // .then(() => {
-      //   axios
-      //     .post("http://localhost:5000/session/new", {
-      //       username: `${uuidv1()}--${this.state.username}`,
-      //       session: Cookie.get("_user_Session")
-      //     })
-      .then(() => {
-        this.setState({
-          username: "",
-          password: ""
-        });
-        this.props.history.push("/");
-      })
+      //   axios.post("http://localhost:5000/session/new", {
+      //     // username: this.state.username,
+      //     session: Cookie.get("_user_Session")
+      //   });
       // })
       .catch(error => {
         console.log("login", error);
@@ -84,7 +91,7 @@ export default class Login extends Component {
         <div className="card card-body mt-5">
           <h2 className="text-center">Login</h2>
           <form onSubmit={this.handleSubmit}>
-            <div className="form-group">
+            {/* <div className="form-group">
               <label>Username</label>
               <input
                 type="text"
@@ -103,6 +110,38 @@ export default class Login extends Component {
                 onChange={this.handleChange}
                 value={this.state.password}
               />
+            </div> */}
+            <div className="form-group has-danger">
+              <label className="form-control-label" htmlFor="inputDanger1">
+                Username
+              </label>
+              <input
+                type="text"
+                className={this.state.invalidLogin}
+                name="username"
+                value={this.state.username}
+                onChange={this.handleChange}
+                id="inputInvalid"
+              />
+              <div className="invalid-feedback">
+                Invalid Username or Password
+              </div>
+            </div>
+            <div className="form-group has-danger">
+              <label className="form-control-label" htmlFor="inputDanger1">
+                Password
+              </label>
+              <input
+                type="password"
+                className={this.state.invalidLogin}
+                name="password"
+                value={this.state.password}
+                onChange={this.handleChange}
+                id="inputInvalid"
+              />
+              <div className="invalid-feedback">
+                Invalid Username or Password
+              </div>
             </div>
             <div className="form-group">
               <button type="submit" className="btn btn-primary">

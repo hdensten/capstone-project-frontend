@@ -8,7 +8,10 @@ export default class Movies extends Component {
     super(props);
 
     this.state = {
-      data: []
+      data: [],
+      borderStyle: "",
+      borderColor: "",
+      borderWidth: ""
       // moviePoster: ""
     };
 
@@ -64,6 +67,17 @@ export default class Movies extends Component {
   //     }
   //   );
   // }
+  handleMouseEnter() {
+    this.setState({
+      borderColor: "#F2A09E",
+      borderStyle: "outset",
+      borderWidth: "7px"
+    });
+  }
+
+  handleMouseLeave() {
+    this.setState({ borderStyle: "", borderColor: "", borderWidth: "" });
+  }
 
   componentDidMount() {
     this.getUserMovies();
@@ -144,14 +158,14 @@ export default class Movies extends Component {
         >
           <h2 style={{ marginBottom: "0" }}>Movies</h2>
           <div className="nav-item">
-            <Link to="/add-movie">
+            <Link to="/search">
               <button className="nav-link btn btn-primary btn-dm text-light">
                 Log Movie
               </button>
             </Link>
           </div>
         </div>
-        <div
+        {/* <div
           className="movie-items-wrapper"
           style={{
             display: "grid",
@@ -165,22 +179,66 @@ export default class Movies extends Component {
                 style={{
                   backgroundSize: "cover",
                   backgroundPosition: "center",
-                  backgroundRepeat: "no-repeat"
+                  backgroundRepeat: "no-repeat",
+                  height: "400px",
+                  width: "100%"
                 }}
               >
-                {/* {this.getMovieInfo(movie.tmdb_id)} */}
+                {this.getMovieInfo(movie.tmdb_id)}
                 <img
-                  src={`https://image.tmdb.org/t/p/original${this.getMovieInfo(
-                    movie.tmdb_id
-                  )}`}
+                  src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
                   // className="card-img"
                   alt=""
                 />
-                {/* {this.moviePosters} */}
+                {this.moviePosters}
               </div>
             ))}
           </div>
+        </div> */}
+
+        <div className="album py-5 bg-light">
+          <div className="container">
+            <div className="row">
+              {this.state.data.map(movie => {
+                return (
+                  <div className="col-md-3">
+                    <Link to={`/movie/${movie.id}`}>
+                      <div className="card mb-4 shadow-sm">
+                        <svg
+                          // onMouseEnter={() => this.handleMouseEnter()}
+                          // onMouseLeave={() => this.handleMouseLeave()}
+                          className="bd-placeholder-img card-img-top"
+                          width="100"
+                          height="400"
+                          xmlns="http://www.w3.org/2000/svg"
+                          preserveAspectRatio="xMidYMid slice"
+                          focusable="false"
+                          role="img"
+                          aria-label="Placeholder: Thumbnail"
+                          style={{
+                            backgroundImage:
+                              "url(" +
+                              `https://image.tmdb.org/t/p/original${movie.poster_path}` +
+                              ")",
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                            backgroundRepeat: "no-repeat",
+                            borderStyle: `${this.state.borderStyle}`,
+                            borderColor: `${this.state.borderColor}`,
+                            borderWidth: `${this.state.borderWidth}`
+                            // height: "60%",
+                            // width: "60%"
+                          }}
+                        />
+                      </div>
+                    </Link>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
+
         {/* <table className="table table-striped">
           <thead>
             <tr>

@@ -21,7 +21,6 @@ export default class Movies extends Component {
       .get(`https://reellog.herokuapp.com/movies/${this.props.currentUser.id}`)
       // .get(`http://localhost:5000/movies/${this.props.currentUser.id}`)
       .then(response => {
-        console.log("getUserMovies:", response);
         this.setState({
           data: response.data
         });
@@ -39,28 +38,13 @@ export default class Movies extends Component {
         `https://api.themoviedb.org/3/movie/${tmdbId}?api_key=${TMDB_API_KEY}&language=en-US`
       )
       .then(response => {
-        console.log("getMovieInfo resonse:", response.data);
         moviePosters.push(response.data.poster_path);
-        console.log(moviePosters);
       })
       .catch(error => {
         console.log(error);
       });
 
-    console.log(moviePosters);
     return moviePosters[0];
-  }
-
-  handleMouseEnter() {
-    this.setState({
-      borderColor: "#F2A09E",
-      borderStyle: "outset",
-      borderWidth: "7px"
-    });
-  }
-
-  handleMouseLeave() {
-    this.setState({ borderStyle: "", borderColor: "", borderWidth: "" });
   }
 
   componentDidMount() {
@@ -90,6 +74,9 @@ export default class Movies extends Component {
         </div>
         <div className="album py-5 bg-light">
           <div className="container">
+            {this.state.data.length === 0 ? (
+              <h5 className="text-muted">Movie log empty...</h5>
+            ) : null}
             <div className="row">
               {this.state.data.map(movie => {
                 return (
@@ -97,8 +84,6 @@ export default class Movies extends Component {
                     <Link to={`/movie/${movie.id}`}>
                       <div className="card mb-4 shadow-sm">
                         <svg
-                          // onMouseEnter={() => this.handleMouseEnter()}
-                          // onMouseLeave={() => this.handleMouseLeave()}
                           className="bd-placeholder-img card-img-top"
                           width="100"
                           height="400"
@@ -114,10 +99,7 @@ export default class Movies extends Component {
                               ")",
                             backgroundSize: "cover",
                             backgroundPosition: "center",
-                            backgroundRepeat: "no-repeat",
-                            borderStyle: `${this.state.borderStyle}`,
-                            borderColor: `${this.state.borderColor}`,
-                            borderWidth: `${this.state.borderWidth}`
+                            backgroundRepeat: "no-repeat"
                           }}
                         />
                       </div>

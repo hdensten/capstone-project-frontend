@@ -68,7 +68,10 @@ class Form extends Component {
           });
           this.props.history.push("/");
         } else {
-          return this.setState({ errorText: "An error occured" });
+          return this.setState({
+            errorText: "An error occured",
+            alertClass: "alert alert-primary"
+          });
         }
         console.log("post movie response:", response.data);
       })

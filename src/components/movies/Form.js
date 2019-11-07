@@ -130,7 +130,10 @@ class Form extends Component {
     } = this.state.data;
     return (
       <Fragment>
-        <div className="card mb-3" style={{ maxWidth: "540px" }}>
+        <div
+          className="card mb-3"
+          style={{ maxWidth: "540px", marginTop: "20px" }}
+        >
           <div className="row no-gutters">
             <div className="col-md-4">
               <img

@@ -147,6 +147,7 @@ class MovieLog extends Component {
     };
     return (
       <div>
+        <div style={{ height: "10px" }} />
         <div
           className="card-container"
           style={{

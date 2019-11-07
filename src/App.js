@@ -1,5 +1,10 @@
 import React, { Component, Fragment } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect
+} from "react-router-dom";
 import axios from "axios";
 import Cookie from "js-cookie";
 
@@ -194,10 +199,11 @@ class App extends Component {
                     />
                   ]
                 : [
+                    <Redirect exact from="/" to="/login" />,
                     <Route
-                      path="/register"
+                      path="/login"
                       render={props => (
-                        <Register
+                        <Login
                           {...props}
                           handleSuccessfulLogin={this.handleSuccessfulLogin}
                           handleUnSuccessfulLogin={this.handleUnSuccessfulLogin}
@@ -206,9 +212,9 @@ class App extends Component {
                       )}
                     />,
                     <Route
-                      path="/login"
+                      path="/register"
                       render={props => (
-                        <Login
+                        <Register
                           {...props}
                           handleSuccessfulLogin={this.handleSuccessfulLogin}
                           handleUnSuccessfulLogin={this.handleUnSuccessfulLogin}

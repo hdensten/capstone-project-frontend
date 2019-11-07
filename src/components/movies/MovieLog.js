@@ -210,7 +210,6 @@ class MovieLog extends Component {
           </div>
           <a
             onClick={this.handleDeleteClick}
-            // className="btn btn-danger btn-sm"
             onMouseEnter={this.toggleHover}
             onMouseLeave={this.toggleHover}
             style={{
@@ -222,12 +221,6 @@ class MovieLog extends Component {
             <FontAwesomeIcon icon="trash" />
           </a>
         </div>
-        {/* <button
-            onClick={this.handleDeleteClick}
-            className="btn btn-danger btn-sm"
-          >
-            Delete
-          </button> */}
       </Fragment>
     );
   }

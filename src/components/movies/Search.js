@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
-import Form from "./Form";
-
 export default class Search extends Component {
   constructor(props) {
     super(props);
@@ -107,8 +105,6 @@ export default class Search extends Component {
                           backgroundSize: "cover",
                           backgroundPosition: "center",
                           backgroundRepeat: "no-repeat"
-                          // height: "60%",
-                          // width: "60%"
                         }}
                       />
                       <div className="card-body">

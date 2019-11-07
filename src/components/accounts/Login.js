@@ -57,7 +57,6 @@ export default class Login extends Component {
           console.log(Cookie.get("_user_Session"));
           axios.post("https://reellog.herokuapp.com/session/new", {
             // axios.post("http://localhost:5000/session/new", {
-            // username: this.state.username,
             session: Cookie.get("_user_Session")
           });
           this.props.handleCurrentUser(response.data);
@@ -71,12 +70,6 @@ export default class Login extends Component {
           });
         }
       })
-      // .then(() => {
-      //   axios.post("http://localhost:5000/session/new", {
-      //     // username: this.state.username,
-      //     session: Cookie.get("_user_Session")
-      //   });
-      // })
       .catch(error => {
         console.log("login", error);
         this.setState({
@@ -92,26 +85,6 @@ export default class Login extends Component {
         <div className="card card-body mt-5">
           <h2 className="text-center">Login</h2>
           <form onSubmit={this.handleSubmit}>
-            {/* <div className="form-group">
-              <label>Username</label>
-              <input
-                type="text"
-                className="form-control"
-                name="username"
-                onChange={this.handleChange}
-                value={this.state.username}
-              />
-            </div>
-            <div className="form-group">
-              <label>Password</label>
-              <input
-                type="password"
-                className="form-control"
-                name="password"
-                onChange={this.handleChange}
-                value={this.state.password}
-              />
-            </div> */}
             <div className="form-group has-danger">
               <label className="form-control-label" htmlFor="inputDanger1">
                 Username

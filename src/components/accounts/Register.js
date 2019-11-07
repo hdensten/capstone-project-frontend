@@ -68,12 +68,9 @@ export default class Register extends Component {
               email: ""
             });
           } else if (response.status === 200) {
-            Cookie.set(
-              "_user_Session",
-              uuidv1() + "--" + this.state.username,
-              // + uuidv4()
-              { expires: 1 }
-            );
+            Cookie.set("_user_Session", uuidv1() + "--" + this.state.username, {
+              expires: 1
+            });
             console.log(Cookie.get("_user_Session"));
             this.props.handleCurrentUser(response.data);
             this.props.handleSuccessfulLogin();

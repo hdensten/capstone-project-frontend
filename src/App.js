@@ -8,25 +8,15 @@ import {
 import axios from "axios";
 import Cookie from "js-cookie";
 
-// import { Provider as AlertProvider } from "react-alert";
-// import AlertTemplate from "react-alert-template-basic";
-
 import Header from "./components/layout/Header";
 import Dashboard from "./components/movies/Dashboard";
 import Search from "./components/movies/Search";
 import Form from "./components/movies/Form";
 import MovieLog from "./components/movies/MovieLog";
-import Alerts from "./components/layout/Alerts";
 import Login from "./components/accounts/Login";
 import Register from "./components/accounts/Register";
 
 import "./styles/bootstrap.min.css";
-
-//  Alert Options
-const alertOptions = {
-  timeout: 3000,
-  position: "top center"
-};
 
 class App extends Component {
   constructor(props) {
@@ -121,7 +111,6 @@ class App extends Component {
         // .get(`http://localhost:5000/session/${Cookie.get("_user_Session")}`)
         .then(response => {
           if (response.status === 200) {
-            // this.handleGetUser(response.data.username);
             this.handleGetUser(Cookie.get("_user_Session").split("--")[1]);
           }
         })
@@ -129,9 +118,8 @@ class App extends Component {
           console.log(response, error);
           Cookie.remove("_user_Session");
         });
-      // Cookie.get("_user_Session").split("--")[1]
     } else if (!Cookie.get("_user_session")) {
-      this.setState({ isLoading: false });
+      this.setState({ isLoading: false, loggedInStatus: "NOT_LOGGED_IN" });
       return null;
     } else if (
       Cookie.get("_user_session") &&
@@ -149,8 +137,6 @@ class App extends Component {
 
   render() {
     return (
-      // <Provider store={store}>
-      // <AlertProvider template={AlertTemplate} {...alertOptions}>
       <Router>
         <Fragment>
           <Header
@@ -158,7 +144,6 @@ class App extends Component {
             loggedInStatus={this.state.loggedInStatus}
             currentUser={this.state.currentUser}
           />
-          <Alerts />
           <div className="container">
             <Switch>
               {this.state.loggedInStatus === "LOGGED_IN"
@@ -199,7 +184,7 @@ class App extends Component {
                     />
                   ]
                 : [
-                    <Redirect exact from="/" to="/login" />,
+                    // <Redirect exact from="/" to="/login" />,
                     <Route
                       path="/login"
                       render={props => (
@@ -227,8 +212,6 @@ class App extends Component {
           </div>
         </Fragment>
       </Router>
-      // </AlertProvider>
-      // </Provider>
     );
   }
 }

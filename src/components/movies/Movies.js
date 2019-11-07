@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import MovieLog from "./MovieLog";
 
 export default class Movies extends Component {
   constructor(props) {
@@ -12,7 +11,6 @@ export default class Movies extends Component {
       borderStyle: "",
       borderColor: "",
       borderWidth: ""
-      // moviePoster: ""
     };
 
     this.getMovieInfo = this.getMovieInfo.bind(this);
@@ -41,9 +39,6 @@ export default class Movies extends Component {
         `https://api.themoviedb.org/3/movie/${tmdbId}?api_key=${TMDB_API_KEY}&language=en-US`
       )
       .then(response => {
-        // this.setState({
-        //   moviePoster: response.data.poster_path
-        // });
         console.log("getMovieInfo resonse:", response.data);
         moviePosters.push(response.data.poster_path);
         console.log(moviePosters);
@@ -56,18 +51,6 @@ export default class Movies extends Component {
     return moviePosters[0];
   }
 
-  // handleClick(id) {
-  //   console.log("Selected movie id:", id);
-  //   this.setState(
-  //     {
-  //       movieId: id,
-  //       movieSelected: true
-  //     },
-  //     () => {
-  //       console.log("movie id state", this.state.movieId);
-  //     }
-  //   );
-  // }
   handleMouseEnter() {
     this.setState({
       borderColor: "#F2A09E",
@@ -166,37 +149,6 @@ export default class Movies extends Component {
             </Link>
           </div>
         </div>
-        {/* <div
-          className="movie-items-wrapper"
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr"
-          }}
-        >
-          <div className="movie-item-wrapper" style={{ position: "relative" }}>
-            {this.state.data.map(movie => (
-              <div
-                className="movie-poster-img"
-                style={{
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                  backgroundRepeat: "no-repeat",
-                  height: "400px",
-                  width: "100%"
-                }}
-              >
-                {this.getMovieInfo(movie.tmdb_id)}
-                <img
-                  src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
-                  // className="card-img"
-                  alt=""
-                />
-                {this.moviePosters}
-              </div>
-            ))}
-          </div>
-        </div> */}
-
         <div className="album py-5 bg-light">
           <div className="container">
             <div className="row">
@@ -227,8 +179,6 @@ export default class Movies extends Component {
                             borderStyle: `${this.state.borderStyle}`,
                             borderColor: `${this.state.borderColor}`,
                             borderWidth: `${this.state.borderWidth}`
-                            // height: "60%",
-                            // width: "60%"
                           }}
                         />
                       </div>
@@ -239,44 +189,6 @@ export default class Movies extends Component {
             </div>
           </div>
         </div>
-
-        {/* <table className="table table-striped">
-          <thead>
-            <tr>
-              <th>id</th>
-              <th>Movie ID</th>
-              <th>Date Watched</th>
-              <th>Rating</th>
-              <th>Review</th>
-              <th />
-              <th />
-            </tr>
-          </thead>
-          <tbody>
-            {this.state.data.map(movie => (
-              <tr key={movie.id}>
-                <td>{movie.id}</td>
-                <td>{movie.tmdb_id}</td>
-                <td>{this.dateFormatter(movie.date)}</td>
-                <td>
-                  <div style={{ display: "flex" }}>
-                    {movie.rating}% {emojiRating(movie.rating)}
-                  </div>
-                </td>
-                <td>{movie.review}</td>
-                <td>
-                  <button className="btn btn-danger btn-sm">Delete</button>
-                </td>
-                <td>
-                  <Link to={`/movie/${movie.id}`}>
-                    <button className="btn btn-info btn-sm">View Log</button>
-                  </Link>
-                </td>
-                <td>{this.getMovieInfo(movie.tmdb_id)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table> */}
       </Fragment>
     );
   }

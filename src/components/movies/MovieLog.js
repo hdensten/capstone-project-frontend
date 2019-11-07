@@ -1,18 +1,26 @@
 import React, { Component, Fragment } from "react";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import Icons from "../helpers/icons";
 
 class MovieLog extends Component {
   constructor(props) {
     super(props);
 
+    Icons();
+
     this.state = {
       data: [],
       tmdbData: [],
-      id: this.props.match.params.id
+      id: this.props.match.params.id,
+      hover: false
     };
     this.handleDeleteClick = this.handleDeleteClick.bind(this);
     this.dateFormatter = this.dateFormatter.bind(this);
+    this.toggleHover = this.toggleHover.bind(this);
+    this.hoverStyle = this.hoverStyle.bind(this);
   }
 
   handleDeleteClick() {
@@ -60,6 +68,10 @@ class MovieLog extends Component {
       });
   }
 
+  toggleHover() {
+    this.setState({ hover: !this.state.hover });
+  }
+
   componentDidMount() {
     this.getMovieInfo();
   }
@@ -88,6 +100,14 @@ class MovieLog extends Component {
       return monthNames[month - 1] + " " + day + ", " + year;
     } else {
       return "N/A";
+    }
+  }
+
+  hoverStyle() {
+    if (this.state.hover === false) {
+      return "#f57a00";
+    } else {
+      return "#CF6701";
     }
   }
 
@@ -188,13 +208,26 @@ class MovieLog extends Component {
             <h5>Review:</h5>
             <p>{this.state.data.review}</p>
           </div>
-          <button
+          <a
+            onClick={this.handleDeleteClick}
+            // className="btn btn-danger btn-sm"
+            onMouseEnter={this.toggleHover}
+            onMouseLeave={this.toggleHover}
+            style={{
+              cursor: "pointer",
+              fontSize: "1.5em",
+              color: `${this.hoverStyle()}`
+            }}
+          >
+            <FontAwesomeIcon icon="trash" />
+          </a>
+        </div>
+        {/* <button
             onClick={this.handleDeleteClick}
             className="btn btn-danger btn-sm"
           >
             Delete
-          </button>
-        </div>
+          </button> */}
       </Fragment>
     );
   }

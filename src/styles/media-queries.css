@@ -1,0 +1,7 @@
+@media (max-width: 700px) {
+  .nav-align-right {
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: flex-end;
+  }
+}

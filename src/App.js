@@ -12,6 +12,8 @@ import Login from "./components/accounts/Login";
 import Register from "./components/accounts/Register";
 
 import "./styles/bootstrap.min.css";
+import "./styles/media-queries.css";
+//imoprt styles
 
 class App extends Component {
   constructor(props) {

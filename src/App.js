@@ -192,6 +192,17 @@ class App extends Component {
                       )}
                     />,
                     <Route
+                      path="/"
+                      render={props => (
+                        <Login
+                          {...props}
+                          handleSuccessfulLogin={this.handleSuccessfulLogin}
+                          handleUnSuccessfulLogin={this.handleUnSuccessfulLogin}
+                          handleCurrentUser={this.handleCurrentUser}
+                        />
+                      )}
+                    />,
+                    <Route
                       path="/register"
                       render={props => (
                         <Register

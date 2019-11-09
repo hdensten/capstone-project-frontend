@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { withRouter, Link } from "react-router-dom";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -30,7 +30,6 @@ class MovieLog extends Component {
         // `http://localhost:5000/movie/delete/${this.props.currentUser.id}/${this.state.id}`
       )
       .then(response => {
-        console.log(response);
         this.props.history.push("/");
       })
       .catch(error => {
@@ -45,7 +44,6 @@ class MovieLog extends Component {
         // `http://localhost:5000/movie/${this.props.currentUser.id}/${this.state.id}`
       )
       .then(response => {
-        console.log("getMovieInfo:", response);
         this.setState({
           data: response.data
         });
@@ -57,7 +55,6 @@ class MovieLog extends Component {
             `https://api.themoviedb.org/3/movie/${this.state.data.tmdb_id}?api_key=${TMDB_API_KEY}&language=en-US`
           )
           .then(response => {
-            console.log("response from getMovieInfo", response.data);
             this.setState({
               tmdbData: response.data
             });

@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import axios from "axios";
 
@@ -29,7 +29,6 @@ class Form extends Component {
         `https://api.themoviedb.org/3/movie/${this.state.tmdbId}?api_key=${TMDB_API_KEY}&language=en-US`
       )
       .then(response => {
-        console.log(response.data);
         this.setState({
           data: response.data,
           posterPath: response.data.poster_path
@@ -49,7 +48,6 @@ class Form extends Component {
     const posterPath = this.state.posterPath;
     const userId = this.props.currentUser.id;
     const movie = { tmdbId, watchDate, rating, review, posterPath, userId };
-    console.log(movie);
     axios
       .post("https://reellog.herokuapp.com/movie", movie)
       // .post("http://localhost:5000/movie", movie)
@@ -73,16 +71,7 @@ class Form extends Component {
             alertClass: "alert alert-primary"
           });
         }
-        console.log("post movie response:", response.data);
       })
-      // .then(() => {
-      //   this.setState({
-      //     watchDate: "",
-      //     rating: "",
-      //     review: ""
-      //   });
-      //   this.props.history.push("/");
-      // })
       .catch(error => {
         console.log("post movie error:", error);
       });
@@ -129,7 +118,7 @@ class Form extends Component {
       runtime
     } = this.state.data;
     return (
-      <Fragment>
+      <div>
         <div
           className="card mb-3"
           style={{ maxWidth: "540px", marginTop: "20px" }}
@@ -225,7 +214,7 @@ class Form extends Component {
             Back to Search
           </button>
         </Link>
-      </Fragment>
+      </div>
     );
   }
 }

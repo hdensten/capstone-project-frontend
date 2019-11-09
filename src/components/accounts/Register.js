@@ -51,7 +51,6 @@ export default class Register extends Component {
         .post("https://reellog.herokuapp.com/user/register", loginData)
         // .post("http://localhost:5000/user/register", loginData)
         .then(response => {
-          console.log("register", response);
           if (response.data === "USERNAME_EXISTS" && response.status === 200) {
             event.preventDefault();
             return this.setState({
@@ -71,7 +70,6 @@ export default class Register extends Component {
             Cookie.set("_user_Session", uuidv1() + "--" + this.state.username, {
               expires: 1
             });
-            console.log(Cookie.get("_user_Session"));
             this.props.handleCurrentUser(response.data);
             this.props.handleSuccessfulLogin();
             this.setState({

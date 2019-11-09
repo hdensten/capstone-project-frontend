@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
@@ -53,7 +53,7 @@ export default class Movies extends Component {
 
   render() {
     return (
-      <Fragment>
+      <div>
         <div
           style={{
             display: "flex",
@@ -110,7 +110,7 @@ export default class Movies extends Component {
             </div>
           </div>
         </div>
-      </Fragment>
+      </div>
     );
   }
 }

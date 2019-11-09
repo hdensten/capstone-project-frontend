@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import axios from "axios";
 import Cookie from "js-cookie";
@@ -13,7 +13,6 @@ import Register from "./components/accounts/Register";
 
 import "./styles/bootstrap.min.css";
 import "./styles/media-queries.css";
-//imoprt styles
 
 class App extends Component {
   constructor(props) {
@@ -50,7 +49,6 @@ class App extends Component {
   }
 
   handleSuccessfulLogout() {
-    console.log(Cookie.get("_user_Session"));
     axios
       .delete(
         `https://reellog.herokuapp.com/session/logout/${Cookie.get(
@@ -60,7 +58,6 @@ class App extends Component {
       )
       .then(response => {
         Cookie.remove("_user_Session");
-        console.log(response.data);
         if (response.data === "SESSION_DELETED") {
           return;
         } else {
@@ -135,90 +132,85 @@ class App extends Component {
   render() {
     return (
       <Router>
-        <Fragment>
-          <Header
-            handleSuccessfulLogout={this.handleSuccessfulLogout}
-            loggedInStatus={this.state.loggedInStatus}
-            currentUser={this.state.currentUser}
-          />
-          <div className="container">
-            <Switch>
-              {this.state.loggedInStatus === "LOGGED_IN"
-                ? [
-                    <Route
-                      exact
-                      path="/"
-                      render={props => (
-                        <Dashboard
-                          {...props}
-                          currentUser={this.state.currentUser}
-                        />
-                      )}
-                    />,
-                    <Route
-                      path="/movie/:id"
-                      render={props => (
-                        <MovieLog
-                          {...props}
-                          currentUser={this.state.currentUser}
-                        />
-                      )}
-                    />,
-                    <Route
-                      path="/search"
-                      render={props => (
-                        <Search
-                          {...props}
-                          currentUser={this.state.currentUser}
-                        />
-                      )}
-                    />,
-                    <Route
-                      path="/add-movie/:tmdbid"
-                      render={props => (
-                        <Form {...props} currentUser={this.state.currentUser} />
-                      )}
-                    />
-                  ]
-                : [
-                    // <Redirect exact from="/" to="/login" />,
-                    <Route
-                      path="/login"
-                      render={props => (
-                        <Login
-                          {...props}
-                          handleSuccessfulLogin={this.handleSuccessfulLogin}
-                          handleUnSuccessfulLogin={this.handleUnSuccessfulLogin}
-                          handleCurrentUser={this.handleCurrentUser}
-                        />
-                      )}
-                    />,
-                    <Route
-                      path="/"
-                      render={props => (
-                        <Login
-                          {...props}
-                          handleSuccessfulLogin={this.handleSuccessfulLogin}
-                          handleUnSuccessfulLogin={this.handleUnSuccessfulLogin}
-                          handleCurrentUser={this.handleCurrentUser}
-                        />
-                      )}
-                    />,
-                    <Route
-                      path="/register"
-                      render={props => (
-                        <Register
-                          {...props}
-                          handleSuccessfulLogin={this.handleSuccessfulLogin}
-                          handleUnSuccessfulLogin={this.handleUnSuccessfulLogin}
-                          handleCurrentUser={this.handleCurrentUser}
-                        />
-                      )}
-                    />
-                  ]}
-            </Switch>
-          </div>
-        </Fragment>
+        <Header
+          handleSuccessfulLogout={this.handleSuccessfulLogout}
+          loggedInStatus={this.state.loggedInStatus}
+          currentUser={this.state.currentUser}
+        />
+        <div className="container">
+          <Switch>
+            {this.state.loggedInStatus === "LOGGED_IN"
+              ? [
+                  <Route
+                    exact
+                    path="/"
+                    render={props => (
+                      <Dashboard
+                        {...props}
+                        currentUser={this.state.currentUser}
+                      />
+                    )}
+                  />,
+                  <Route
+                    path="/movie/:id"
+                    render={props => (
+                      <MovieLog
+                        {...props}
+                        currentUser={this.state.currentUser}
+                      />
+                    )}
+                  />,
+                  <Route
+                    path="/search"
+                    render={props => (
+                      <Search {...props} currentUser={this.state.currentUser} />
+                    )}
+                  />,
+                  <Route
+                    path="/add-movie/:tmdbid"
+                    render={props => (
+                      <Form {...props} currentUser={this.state.currentUser} />
+                    )}
+                  />
+                ]
+              : [
+                  <Route
+                    path="/login"
+                    render={props => (
+                      <Login
+                        {...props}
+                        handleSuccessfulLogin={this.handleSuccessfulLogin}
+                        handleUnSuccessfulLogin={this.handleUnSuccessfulLogin}
+                        handleCurrentUser={this.handleCurrentUser}
+                      />
+                    )}
+                  />,
+                  <Route
+                    exact
+                    path="/"
+                    render={props => (
+                      <Login
+                        {...props}
+                        handleSuccessfulLogin={this.handleSuccessfulLogin}
+                        handleUnSuccessfulLogin={this.handleUnSuccessfulLogin}
+                        handleCurrentUser={this.handleCurrentUser}
+                      />
+                    )}
+                  />,
+                  <Route
+                    path="/register"
+                    render={props => (
+                      <Register
+                        {...props}
+                        handleSuccessfulLogin={this.handleSuccessfulLogin}
+                        handleUnSuccessfulLogin={this.handleUnSuccessfulLogin}
+                        handleCurrentUser={this.handleCurrentUser}
+                      />
+                    )}
+                  />
+                ]}
+          </Switch>
+        </div>
       </Router>
     );
   }

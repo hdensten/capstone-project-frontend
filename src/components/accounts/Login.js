@@ -47,14 +47,9 @@ export default class Login extends Component {
             password: ""
           });
         } else if (response.status === 200) {
-          console.log("login:", response.data);
-          Cookie.set(
-            "_user_Session",
-            uuidv1() + "--" + this.state.username,
-            // + uuidv4()
-            { expires: 1 }
-          );
-          console.log(Cookie.get("_user_Session"));
+          Cookie.set("_user_Session", uuidv1() + "--" + this.state.username, {
+            expires: 1
+          });
           axios.post("https://reellog.herokuapp.com/session/new", {
             // axios.post("http://localhost:5000/session/new", {
             session: Cookie.get("_user_Session")

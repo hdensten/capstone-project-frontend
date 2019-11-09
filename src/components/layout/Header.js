@@ -30,12 +30,12 @@ class Header extends Component {
     const guestLinks = (
       <ul className="navbar-nav mt-2 mt-lg-0 nav-align-right">
         <li className="nav-item">
-          <Link to="/login" className="nav-link">
+          <Link to="/login" className="nav-link" style={{ padding: "5px" }}>
             Login
           </Link>
         </li>
         <li className="nav-item">
-          <Link to="/register" className="nav-link">
+          <Link to="/register" className="nav-link" style={{ padding: "5px" }}>
             Register
           </Link>
         </li>
